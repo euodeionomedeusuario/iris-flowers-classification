@@ -1,6 +1,20 @@
 import csv
 import random
 import math
+import operator
+
+def getNeighbors(trainingSet, testInstance, k):
+	distances = []
+	length = len(testInstance)-1
+	for x in range(len(trainingSet)):
+		dist = euclideanDistance(testInstance, trainingSet[x], length)
+		distances.append((trainingSet[x], dist))
+	distances.sort(key=operator.itemgetter(1))
+	neighbors = []
+	for x in range(k):
+		neighbors.append(distances[x][0])
+	return neighbors
+
 
 def euclideanDistance(instance1, instance2, length):
 	distance = 0
@@ -35,3 +49,9 @@ data2 = [4, 4, 4, 'b']
 distance = euclideanDistance(data1, data2, 3)
 
 print('Distance: ' + repr(distance))
+
+trainSet = [[2, 2, 2, 'a'], [4, 4, 4, 'b']]
+testInstance = [5, 5, 5]
+k = 1
+neighbors = getNeighbors(trainSet, testInstance, 1)
+print(neighbors)
