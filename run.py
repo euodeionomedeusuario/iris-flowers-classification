@@ -46,40 +46,59 @@ def getResponse(neighbors):
 	return sortedVotes[0][0]
 
 def getAccuracy(testSet, predictions):
-	correct = 0
+	vp = 0
 	for x in range(len(testSet)):
 		if testSet[x][-1] == predictions[x]:
-			correct += 1
-	return (correct/float(len(testSet))) * 100.0
+			vp += 1
+	return (vp/float(len(testSet))) * 100.0
 
 def getTable(testSet, predictions):
-	setosa = {"name": "Iris-setosa", "correct": 0, "incorrect": 0}
-	versicolor = {"name": "Iris-versicolor", "correct": 0, "incorrect": 0}
-	virginica = {"name": "Iris-virginica", "correct": 0, "incorrect": 0}
+	setosa = {"name": "Iris-setosa", "vp": 0, "vn": 0, "fn": 0, "fp": 0}
+	versicolor = {"name": "Iris-versicolor", "vp": 0, "vn": 0, "fn": 0,"fp": 0}
+	virginica = {"name": "Iris-virginica", "vp": 0, "vn": 0, "fn": 0, "fp": 0}
 
 	for x in range(len(testSet)):
+		#Verdadeiramente Positivo
 		if testSet[x][-1] == predictions[x]:
-			if(testSet[x][-1] == "Iris-setosa"):
-				setosa["correct"] += 1
-			elif(testSet[x][-1] == "Iris-versicolor"):
-				versicolor["correct"] += 1
-			elif(testSet[x][-1] == "Iris-virginica"):
-				virginica["correct"] += 1
+			if(predictions[x] == "Iris-setosa"):
+				setosa["vp"] += 1
+			elif(predictions[x] == "Iris-versicolor"):
+				versicolor["vp"] += 1
+			elif(predictions[x] == "Iris-virginica"):
+				virginica["vp"] += 1
+				setosa["fp"] += 1
+				versicolor["fp"] += 1
+		#Falso Positivo
 		else:
+			if(predictions[x] == "Iris-setosa"):
+				setosa["vn"] += 1
+				versicolor["fp"] += 1
+				virginica["fp"] += 1
+			elif(predictions[x] == "Iris-versicolor"):
+				versicolor["vn"] += 1
+				setosa["fp"] += 1
+				virginica["fp"] += 1
+			elif(predictions[x] == "Iris-virginica"):
+				virginica["vn"] += 1
+				setosa["fp"] += 1
+				versicolor["fp"] += 1
 			if(testSet[x][-1] == "Iris-setosa"):
-				setosa["incorrect"] += 1
+				setosa["fn"] += 1
 			elif(testSet[x][-1] == "Iris-versicolor"):
-				versicolor["incorrect"] += 1
+				versicolor["fn"] += 1
 			elif(testSet[x][-1] == "Iris-virginica"):
-				virginica["incorrect"] += 1
+				virginica["fn"] += 1
 
 	return [setosa, versicolor, virginica]
 
 def getPrecision(table):
 	for x in table:
-		value = x["correct"] / (x["correct"] + x["incorrect"])
+		#Precision = VP / VP + FP
 
-		print("Precision of " + x["name"] + " - " + str(value))
+		precision = x["vp"] / (x["vp"] + x["fp"])
+
+		print(x)
+		print("Precision - " + str(precision))
 
 
 def main():
@@ -103,7 +122,6 @@ def main():
 	print('Accuracy: ' + repr(accuracy) + '%')
 
 	table = getTable(testSet, predictions)
-	print(table)
 
 	getPrecision(table)
 
