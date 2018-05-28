@@ -53,9 +53,9 @@ def getAccuracy(testSet, predictions):
 	return (correct/float(len(testSet))) * 100.0
 
 def getTable(testSet, predictions):
-	setosa = {"correct": 0, "incorrect": 0}
-	versicolor = {"correct": 0, "incorrect": 0}
-	virginica = {"correct": 0, "incorrect": 0}
+	setosa = {"name": "Iris-setosa", "correct": 0, "incorrect": 0}
+	versicolor = {"name": "Iris-versicolor", "correct": 0, "incorrect": 0}
+	virginica = {"name": "Iris-virginica", "correct": 0, "incorrect": 0}
 
 	for x in range(len(testSet)):
 		if testSet[x][-1] == predictions[x]:
@@ -74,6 +74,13 @@ def getTable(testSet, predictions):
 				virginica["incorrect"] += 1
 
 	return [setosa, versicolor, virginica]
+
+def getPrecision(table):
+	for x in table:
+		value = x["correct"] / (x["correct"] + x["incorrect"])
+
+		print("Precision of " + x["name"] + " - " + str(value))
+
 
 def main():
 	trainingSet=[]
@@ -97,5 +104,7 @@ def main():
 
 	table = getTable(testSet, predictions)
 	print(table)
+
+	getPrecision(table)
 
 main()
