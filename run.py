@@ -101,6 +101,16 @@ def getPrecision(table):
 		print("Precision - " + str(precision))
 
 
+def getSensitivity(table):
+	for x in table:
+		#sensitivity = VP / VP + FN
+
+		sensitivity = x["vp"] / (x["vp"] + x["fn"])
+
+		print(x)
+		print("Sensitivity - " + str(sensitivity))
+
+
 def main():
 	trainingSet=[]
 	testSet=[]
@@ -124,5 +134,6 @@ def main():
 	table = getTable(testSet, predictions)
 
 	getPrecision(table)
+	getSensitivity(table)
 
 main()
