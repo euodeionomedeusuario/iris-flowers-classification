@@ -110,6 +110,27 @@ def getSensitivity(table):
 		print(x)
 		print("Sensitivity - " + str(sensitivity))
 
+def getSpecificity(table):
+	for x in table:
+		#specificity = VP / VP + FN
+
+		specificity = x["vn"] / (x["vn"] + x["fp"])
+
+		print(x)
+		print("Specificity - " + str(specificity))
+
+def getFMeasure(table):
+	for x in table:
+		#Precision = VP / VP + FP
+		precision = x["vp"] / (x["vp"] + x["fp"])
+
+		#sensitivity = VP / VP + FN
+		sensitivity = x["vp"] / (x["vp"] + x["fn"])
+
+		f = 2 * (precision * sensitivity) / (precision + sensitivity)
+
+		print(x)
+		print("F Measure - " + str(f))
 
 def main():
 	trainingSet=[]
@@ -135,5 +156,7 @@ def main():
 
 	getPrecision(table)
 	getSensitivity(table)
+	getSpecificity(table)
+	getFMeasure(table)
 
 main()
