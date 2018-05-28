@@ -45,13 +45,6 @@ def getResponse(neighbors):
 	sortedVotes = sorted(classVotes.items(), key=operator.itemgetter(1), reverse=True)
 	return sortedVotes[0][0]
 
-def getAccuracy(testSet, predictions):
-	vp = 0
-	for x in range(len(testSet)):
-		if testSet[x][-1] == predictions[x]:
-			vp += 1
-	return (vp/float(len(testSet))) * 100.0
-
 def getTable(testSet, predictions):
 	setosa = {"name": "Iris-setosa", "vp": 0, "vn": 0, "fn": 0, "fp": 0}
 	versicolor = {"name": "Iris-versicolor", "vp": 0, "vn": 0, "fn": 0,"fp": 0}
@@ -132,6 +125,14 @@ def getFMeasure(table):
 		print(x)
 		print("F Measure - " + str(f))
 
+def getAccuracy(table):
+	for x in table:
+		accuracy = (x["vp"] + x["vn"]) / (x["vp"] + x["vn"] + x["fp"] + x["fn"])
+
+		print(x)
+		print("Accuracy - " + str(accuracy))
+
+
 def main():
 	trainingSet=[]
 	testSet=[]
@@ -149,8 +150,7 @@ def main():
 		result = getResponse(neighbors)
 		predictions.append(result)
 		print('> predicted=' + repr(result) + ', actual=' + repr(testSet[x][-1]))
-	accuracy = getAccuracy(testSet, predictions)
-	print('Accuracy: ' + repr(accuracy) + '%')
+
 
 	table = getTable(testSet, predictions)
 
@@ -158,5 +158,6 @@ def main():
 	getSensitivity(table)
 	getSpecificity(table)
 	getFMeasure(table)
+	getAccuracy(table)
 
 main()
