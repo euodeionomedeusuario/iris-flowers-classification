@@ -52,16 +52,39 @@ def getAccuracy(testSet, predictions):
 			correct += 1
 	return (correct/float(len(testSet))) * 100.0
 
+def getTable(testSet, predictions):
+	setosa = {"correct": 0, "incorrect": 0}
+	versicolor = {"correct": 0, "incorrect": 0}
+	virginica = {"correct": 0, "incorrect": 0}
+
+	for x in range(len(testSet)):
+		if testSet[x][-1] == predictions[x]:
+			if(testSet[x][-1] == "Iris-setosa"):
+				setosa["correct"] += 1
+			elif(testSet[x][-1] == "Iris-versicolor"):
+				versicolor["correct"] += 1
+			elif(testSet[x][-1] == "Iris-virginica"):
+				virginica["correct"] += 1
+		else:
+			if(testSet[x][-1] == "Iris-setosa"):
+				setosa["incorrect"] += 1
+			elif(testSet[x][-1] == "Iris-versicolor"):
+				versicolor["incorrect"] += 1
+			elif(testSet[x][-1] == "Iris-virginica"):
+				virginica["incorrect"] += 1
+
+	return [setosa, versicolor, virginica]
+
 def main():
 	trainingSet=[]
 	testSet=[]
 	split = 0.67
-	
+
 	loadDataset('iris.data', split, trainingSet, testSet)
-	
+
 	print('Train set: ' + repr(len(trainingSet)))
 	print('Test set: ' + repr(len(testSet)))
-	
+
 	predictions=[]
 	k = 3
 	for x in range(len(testSet)):
@@ -71,5 +94,8 @@ def main():
 		print('> predicted=' + repr(result) + ', actual=' + repr(testSet[x][-1]))
 	accuracy = getAccuracy(testSet, predictions)
 	print('Accuracy: ' + repr(accuracy) + '%')
+
+	table = getTable(testSet, predictions)
+	print(table)
 
 main()
